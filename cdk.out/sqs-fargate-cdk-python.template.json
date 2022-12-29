@@ -1,0 +1,1084 @@
+{
+  "Resources": {
+    "SqsFargateCdkPythonQueue8B32F96B": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "VisibilityTimeout": 300
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonQueue/Resource"
+      }
+    },
+    "SqsFargateCdkPythonVpc6B1A2BDC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/Resource"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet1SubnetDF1D68D7": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/19",
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "AvailabilityZone": "eu-west-2a",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/Subnet"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet1RouteTable56D60D2F": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/RouteTable"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet1RouteTableAssociationF5B3949C": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1RouteTable56D60D2F"
+        },
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1SubnetDF1D68D7"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/RouteTableAssociation"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet1DefaultRoute7499868F": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1RouteTable56D60D2F"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "SqsFargateCdkPythonVpcIGW4F331853"
+        }
+      },
+      "DependsOn": [
+        "SqsFargateCdkPythonVpcVPCGW5FB5E3F6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceInstanceProfileC78D317B": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "SqsFargateCdkPythonVpcNatRole83D79A4F"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/NatInstance/InstanceProfile"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceAB88C729": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "AvailabilityZone": "eu-west-2a",
+        "IamInstanceProfile": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceInstanceProfileC78D317B"
+        },
+        "ImageId": "ami-0d853de95d1e94cdb",
+        "InstanceType": "t3.small",
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "SqsFargateCdkPythonVpcNatSecurityGroup8DFF1130",
+              "GroupId"
+            ]
+          }
+        ],
+        "SourceDestCheck": false,
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1SubnetDF1D68D7"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/NatInstance"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": "#!/bin/bash"
+        }
+      },
+      "DependsOn": [
+        "SqsFargateCdkPythonVpcNatRole83D79A4F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/NatInstance/Resource"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet2Subnet8AF47CE0": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.32.0/19",
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "AvailabilityZone": "eu-west-2b",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/Subnet"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet2RouteTable7F44F4A5": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/RouteTable"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet2RouteTableAssociationCF5E6851": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet2RouteTable7F44F4A5"
+        },
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet2Subnet8AF47CE0"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/RouteTableAssociation"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet2DefaultRouteBB621026": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet2RouteTable7F44F4A5"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "SqsFargateCdkPythonVpcIGW4F331853"
+        }
+      },
+      "DependsOn": [
+        "SqsFargateCdkPythonVpcVPCGW5FB5E3F6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/DefaultRoute"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet3SubnetDACF957C": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.64.0/19",
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "AvailabilityZone": "eu-west-2c",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/Subnet"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet3RouteTable3F39B021": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/RouteTable"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet3RouteTableAssociationE7DCA2FF": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet3RouteTable3F39B021"
+        },
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet3SubnetDACF957C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/RouteTableAssociation"
+      }
+    },
+    "SqsFargateCdkPythonVpcPublicSubnet3DefaultRoute2D656A36": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet3RouteTable3F39B021"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "SqsFargateCdkPythonVpcIGW4F331853"
+        }
+      },
+      "DependsOn": [
+        "SqsFargateCdkPythonVpcVPCGW5FB5E3F6"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/DefaultRoute"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet1Subnet0D849335": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.96.0/19",
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "AvailabilityZone": "eu-west-2a",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/Subnet"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet1RouteTable85D5F24D": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/RouteTable"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet1RouteTableAssociationF0DDC48C": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet1RouteTable85D5F24D"
+        },
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet1Subnet0D849335"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet1DefaultRouteDF5323E9": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet1RouteTable85D5F24D"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceAB88C729"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet2Subnet4DFE2684": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.128.0/19",
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "AvailabilityZone": "eu-west-2b",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/Subnet"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet2RouteTable3B9B7AFB": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/RouteTable"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet2RouteTableAssociation19C2DB6A": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet2RouteTable3B9B7AFB"
+        },
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet2Subnet4DFE2684"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/RouteTableAssociation"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet2DefaultRouteE9226C56": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet2RouteTable3B9B7AFB"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceAB88C729"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/DefaultRoute"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet3Subnet4E7CB802": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.160.0/19",
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "AvailabilityZone": "eu-west-2c",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/Subnet"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet3RouteTableAAC470F2": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/RouteTable"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet3RouteTableAssociationBEFC64D1": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet3RouteTableAAC470F2"
+        },
+        "SubnetId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet3Subnet4E7CB802"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/RouteTableAssociation"
+      }
+    },
+    "SqsFargateCdkPythonVpcPrivateSubnet3DefaultRoute42CBE807": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "SqsFargateCdkPythonVpcPrivateSubnet3RouteTableAAC470F2"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "InstanceId": {
+          "Ref": "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceAB88C729"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/DefaultRoute"
+      }
+    },
+    "SqsFargateCdkPythonVpcIGW4F331853": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/IGW"
+      }
+    },
+    "SqsFargateCdkPythonVpcVPCGW5FB5E3F6": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        },
+        "InternetGatewayId": {
+          "Ref": "SqsFargateCdkPythonVpcIGW4F331853"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/VPCGW"
+      }
+    },
+    "SqsFargateCdkPythonVpcNatSecurityGroup8DFF1130": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Security Group for NAT instances",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:ALL TRAFFIC",
+            "IpProtocol": "-1"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc"
+          }
+        ],
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/NatSecurityGroup/Resource"
+      }
+    },
+    "SqsFargateCdkPythonVpcNatRole83D79A4F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/NatRole/Resource"
+      }
+    },
+    "SqsFargateCdkPythonClusterE88A5963": {
+      "Type": "AWS::ECS::Cluster",
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonCluster/Resource"
+      }
+    },
+    "SqsFargateCdkPythonRoleD7D97EE9": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonRole/Resource"
+      }
+    },
+    "SqsFargateCdkPythonRoleDefaultPolicyA674B3E2": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SqsFargateCdkPythonQueue8B32F96B",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SqsFargateCdkPythonRoleDefaultPolicyA674B3E2",
+        "Roles": [
+          {
+            "Ref": "SqsFargateCdkPythonRoleD7D97EE9"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonRole/DefaultPolicy/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateTaskDefinition1ABEA0C8": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "QUEUE_URL",
+                "Value": {
+                  "Ref": "SqsFargateCdkPythonQueue8B32F96B"
+                }
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Sub": "934433842270.dkr.ecr.eu-west-2.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-934433842270-eu-west-2:a5c192cd30780dbde3f94bba7a1c99e0e2ff32df422ecd73375f025d422d9104"
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "SqsFargateCdkPythonFargateTaskDefinitionSqsFargateCdkPythonContainerLogGroup705D05D9"
+                },
+                "awslogs-stream-prefix": "sqs_fargate_cdk_python",
+                "awslogs-region": "eu-west-2"
+              }
+            },
+            "Name": "SqsFargateCdkPythonContainer"
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleB0A7B9FA",
+            "Arn"
+          ]
+        },
+        "Family": "sqsfargatecdkpythonSqsFargateCdkPythonFargateTaskDefinition1EBEA684",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "SqsFargateCdkPythonRoleD7D97EE9",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateTaskDefinitionSqsFargateCdkPythonContainerLogGroup705D05D9": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/SqsFargateCdkPythonContainer/LogGroup/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleB0A7B9FA": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/ExecutionRole/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleDefaultPolicy54399424": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:eu-west-2:934433842270:repository/cdk-hnb659fds-container-assets-934433842270-eu-west-2"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SqsFargateCdkPythonFargateTaskDefinitionSqsFargateCdkPythonContainerLogGroup705D05D9",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleDefaultPolicy54399424",
+        "Roles": [
+          {
+            "Ref": "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleB0A7B9FA"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateService9D194946": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "SqsFargateCdkPythonClusterE88A5963"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 0,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SqsFargateCdkPythonFargateServiceSecurityGroupDA46299D",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "SqsFargateCdkPythonVpcPrivateSubnet1Subnet0D849335"
+              },
+              {
+                "Ref": "SqsFargateCdkPythonVpcPrivateSubnet2Subnet4DFE2684"
+              },
+              {
+                "Ref": "SqsFargateCdkPythonVpcPrivateSubnet3Subnet4E7CB802"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "SqsFargateCdkPythonFargateTaskDefinition1ABEA0C8"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/Service"
+      }
+    },
+    "SqsFargateCdkPythonFargateServiceSecurityGroupDA46299D": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "SqsFargateCdkPythonVpc6B1A2BDC"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/SecurityGroup/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateServiceTaskCountTarget5628FE73": {
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+      "Properties": {
+        "MaxCapacity": 1,
+        "MinCapacity": 0,
+        "ResourceId": {
+          "Fn::Join": [
+            "",
+            [
+              "service/",
+              {
+                "Ref": "SqsFargateCdkPythonClusterE88A5963"
+              },
+              "/",
+              {
+                "Fn::GetAtt": [
+                  "SqsFargateCdkPythonFargateService9D194946",
+                  "Name"
+                ]
+              }
+            ]
+          ]
+        },
+        "RoleARN": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":iam::934433842270:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+            ]
+          ]
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs"
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricLowerPolicyE507F642": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "sqsfargatecdkpythonSqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricLowerPolicy8CC43978",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SqsFargateCdkPythonFargateServiceTaskCountTarget5628FE73"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 300,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalUpperBound": 0,
+              "ScalingAdjustment": -1
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/LowerPolicy/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricLowerAlarmFA901E23": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricLowerPolicyE507F642"
+          }
+        ],
+        "AlarmDescription": "Lower threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SqsFargateCdkPythonQueue8B32F96B",
+                "QueueName"
+              ]
+            }
+          }
+        ],
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS",
+        "Period": 300,
+        "Statistic": "Maximum",
+        "Threshold": 0
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/LowerAlarm/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricUpperPolicy348E8217": {
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+      "Properties": {
+        "PolicyName": "sqsfargatecdkpythonSqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricUpperPolicyECE76B99",
+        "PolicyType": "StepScaling",
+        "ScalingTargetId": {
+          "Ref": "SqsFargateCdkPythonFargateServiceTaskCountTarget5628FE73"
+        },
+        "StepScalingPolicyConfiguration": {
+          "AdjustmentType": "ChangeInCapacity",
+          "Cooldown": 300,
+          "MetricAggregationType": "Maximum",
+          "StepAdjustments": [
+            {
+              "MetricIntervalLowerBound": 0,
+              "ScalingAdjustment": 1
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/UpperPolicy/Resource"
+      }
+    },
+    "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricUpperAlarmAA92D971": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "AlarmActions": [
+          {
+            "Ref": "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricUpperPolicy348E8217"
+          }
+        ],
+        "AlarmDescription": "Upper threshold scaling alarm",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Fn::GetAtt": [
+                "SqsFargateCdkPythonQueue8B32F96B",
+                "QueueName"
+              ]
+            }
+          }
+        ],
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS",
+        "Period": 300,
+        "Statistic": "Maximum",
+        "Threshold": 1
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/UpperAlarm/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/11SwW7bMAz9lt4Vre2ADjumCVoE6MGzh14LRmUcLbboSVSDwPC/l5LtJO1JT0+U+N6j7vXdL317A8ewMO+HRWO3uq8YzEEJ9daH/0H3fyJGVKudy2BQaO51/9qZRL0WK1XEbWNNFbcOOXEXVFJk/AvbBi/8hVuGQMYCW3LnYrVxgcGZfOGMC28/gPHy8MYxesHPwh7hNCmZdksWA/sWHasKTfSWT8+eYpc1XBODstDq/qpT4WlnRW1Jo+S8FiT2co8RpQQkllUTg6hI/AyfwNeQ3IXDGnfW2dnbd4Ycg3Xor7jpboX+w472Z1gZaFJe6ZEVRcdJgH+DEJCDXpM5oN+0UKdAJR450yV2FCyTPz1CQNVQLYJfqD7nMONBQdeJqTwFiExBmllXyy84d/X1NNevTMXYVWP1lNAVszSz9S8lgzINxfcjsNnrftmAb1NNBsOgSgwUvVjOTuQf1nIzz2E6GFRx4j25Hz/1b/1w8y9Yu/CSiG1Rl+P6CVUCJpfSAgAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "sqs-fargate-cdk-python/CDKMetadata/Default"
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}

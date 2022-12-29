@@ -1,0 +1,340 @@
+{
+  "version": "16.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "sqs-fargate-cdk-python.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "sqs-fargate-cdk-python.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "sqs-fargate-cdk-python": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://934433842270/eu-west-2",
+      "properties": {
+        "templateFile": "sqs-fargate-cdk-python.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::934433842270:role/cdk-hnb659fds-deploy-role-934433842270-eu-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::934433842270:role/cdk-hnb659fds-cfn-exec-role-934433842270-eu-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-934433842270-eu-west-2/940206264d72cbc64c6eb73a1ac334128860ee664f7eafce5e85399f6dc5ca92.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "sqs-fargate-cdk-python.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::934433842270:role/cdk-hnb659fds-lookup-role-934433842270-eu-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "sqs-fargate-cdk-python.assets"
+      ],
+      "metadata": {
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonQueue/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonQueue8B32F96B"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpc6B1A2BDC"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet1SubnetDF1D68D7"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet1RouteTable56D60D2F"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet1RouteTableAssociationF5B3949C"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet1DefaultRoute7499868F"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/NatInstance/InstanceProfile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceInstanceProfileC78D317B"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet1/NatInstance/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet1NatInstanceAB88C729"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet2Subnet8AF47CE0"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet2RouteTable7F44F4A5"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet2RouteTableAssociationCF5E6851"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet2DefaultRouteBB621026"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet3SubnetDACF957C"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet3RouteTable3F39B021"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet3RouteTableAssociationE7DCA2FF"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PublicSubnet3/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPublicSubnet3DefaultRoute2D656A36"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet1Subnet0D849335"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet1RouteTable85D5F24D"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet1RouteTableAssociationF0DDC48C"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet1DefaultRouteDF5323E9"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet2Subnet4DFE2684"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet2RouteTable3B9B7AFB"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet2RouteTableAssociation19C2DB6A"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet2DefaultRouteE9226C56"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet3Subnet4E7CB802"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet3RouteTableAAC470F2"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet3RouteTableAssociationBEFC64D1"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/PrivateSubnet3/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcPrivateSubnet3DefaultRoute42CBE807"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcIGW4F331853"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcVPCGW5FB5E3F6"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/NatSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcNatSecurityGroup8DFF1130"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonVpc/NatRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonVpcNatRole83D79A4F"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonClusterE88A5963"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonRoleD7D97EE9"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonRoleDefaultPolicyA674B3E2"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateTaskDefinition1ABEA0C8"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/SqsFargateCdkPythonContainer/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateTaskDefinitionSqsFargateCdkPythonContainerLogGroup705D05D9"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleB0A7B9FA"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateTaskDefinition/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateTaskDefinitionExecutionRoleDefaultPolicy54399424"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateService9D194946"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateServiceSecurityGroupDA46299D"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateServiceTaskCountTarget5628FE73"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/LowerPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricLowerPolicyE507F642"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/LowerAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricLowerAlarmFA901E23"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/UpperPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricUpperPolicy348E8217"
+          }
+        ],
+        "/sqs-fargate-cdk-python/SqsFargateCdkPythonFargateService/TaskCount/Target/SqsFargateCdkPythonScaleOnMetric/UpperAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SqsFargateCdkPythonFargateServiceTaskCountTargetSqsFargateCdkPythonScaleOnMetricUpperAlarmAA92D971"
+          }
+        ],
+        "/sqs-fargate-cdk-python/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/sqs-fargate-cdk-python/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/sqs-fargate-cdk-python/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "sqs-fargate-cdk-python"
+    }
+  }
+}
